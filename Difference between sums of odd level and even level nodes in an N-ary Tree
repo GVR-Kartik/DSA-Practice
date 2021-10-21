@@ -1,0 +1,97 @@
+// C++ Program to implement
+// the above approach
+#include <bits/stdc++.h>
+using namespace std;
+
+// Structure of a node
+// of an n-ary tree
+struct Node {
+	int val;
+	vector<Node*> children;
+};
+
+// Function to create a
+// new tree node
+Node* newNode(int val)
+{
+	Node* temp = new Node;
+	temp->val = val;
+	return temp;
+}
+
+// Function to find the difference
+// between of sums node values of
+// odd and even levels in an N-ary tree
+int evenOddLevelDifference(Node* root)
+{
+	// Store the sums of nodes at
+	// even and odd levels
+	int evenSum = 0, oddSum = 0;
+
+	// Initialize a queue to store
+	// pair of node and level
+	queue<pair<Node*, int> > q;
+
+	// Push the root into the
+	// queue with level 1
+	q.push({ root, 1 });
+
+	// Iterate all levels
+	// of tree are traversed
+	while (!q.empty()) {
+
+		// Store the node at the
+		// front of the queue
+		pair<Node*, int> currNode
+			= q.front();
+
+		// Pop the front node
+		q.pop();
+
+		// Store the current level
+		int currLevel
+			= currNode.second;
+
+		// Store the current node value
+		int currVal
+			= currNode.first->val;
+
+		// If current node
+		// level is odd
+		if (currLevel % 2)
+
+			// Add to odd sum
+			oddSum += currVal;
+		else
+
+			// Add to even sum
+			evenSum += currVal;
+
+		// Push all the children of current node
+		// with increasing current level by 1
+		for (auto child : currNode.first->children) {
+			q.push({ child, currLevel + 1 });
+		}
+	}
+
+	// Return the difference
+	return (oddSum - evenSum);
+}
+
+// Driver Code
+int main()
+{
+	// Create the N-ary Tree
+	Node* root = newNode(4);
+	root->children.push_back(newNode(2));
+	root->children.push_back(newNode(3));
+	root->children.push_back(newNode(-5));
+	root->children[0]->children.push_back(newNode(-1));
+	root->children[0]->children.push_back(newNode(3));
+	root->children[2]->children.push_back(newNode(-2));
+	root->children[2]->children.push_back(newNode(6));
+
+	cout << evenOddLevelDifference(root);
+
+	return 0;
+}
